@@ -14,8 +14,8 @@ app.use(cors());
 // Parse incoming request bodies in JSON format
 app.use(bodyParser.json());
 
-// MongoDB connection string
-const mongoUri = process.env.MONGO_URI || 'your-mongodb-uri-here';
+// MongoDB connection string (replace 'myDatabaseName' with your actual database name)
+const mongoUri = process.env.MONGO_URI || 'mongodb+srv://pashaup443:God112256@cluster0.qeqij.mongodb.net/myDatabaseName?retryWrites=true&w=majority';
 mongoose.connect(mongoUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
