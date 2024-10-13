@@ -3,26 +3,24 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
-// Initialize express app
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware
+// Enable CORS for all routes
 app.use(cors());
+
+// Parse incoming request bodies in JSON format
 app.use(bodyParser.json());
 
-// MongoDB connection string (replace <db_password> with your actual password)
-const mongoUri = 'mongodb+srv://pashaup443:God112256@cluster0.qeqij.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
-
-// Connect to MongoDB
+// MongoDB connection
+const mongoUri = process.env.MONGO_URI || 'your-mongodb-uri-here';
 mongoose.connect(mongoUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-})
-    .then(() => console.log('MongoDB connected'))
-    .catch((error) => console.log('MongoDB connection error:', error));
+}).then(() => console.log('MongoDB connected'))
+  .catch((error) => console.log('MongoDB connection error:', error));
 
-// Define a Mongoose schema and model for SMS data
+// SMS Schema
 const smsSchema = new mongoose.Schema({
     sender: String,
     message: String,
@@ -30,7 +28,7 @@ const smsSchema = new mongoose.Schema({
 });
 const Sms = mongoose.model('Sms', smsSchema);
 
-// Define a Mongoose schema and model for Notification data
+// Notification Schema
 const notificationSchema = new mongoose.Schema({
     app: String,
     title: String,
@@ -38,8 +36,9 @@ const notificationSchema = new mongoose.Schema({
 });
 const Notification = mongoose.model('Notification', notificationSchema);
 
-// Route to receive and save SMS data
+// SMS POST Route
 app.post('/api/sms', async (req, res) => {
+    console.log("SMS endpoint hit, request body:", req.body);
     try {
         const smsData = new Sms(req.body);
         await smsData.save();
@@ -51,8 +50,9 @@ app.post('/api/sms', async (req, res) => {
     }
 });
 
-// Route to receive and save Notification data
+// Notification POST Route
 app.post('/api/notifications', async (req, res) => {
+    console.log("Notification endpoint hit, request body:", req.body);
     try {
         const notificationData = new Notification(req.body);
         await notificationData.save();
